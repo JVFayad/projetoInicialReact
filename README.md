@@ -1,2 +1,0 @@
-# projetoInicialReact
-Created with CodeSandbox
