@@ -3,38 +3,66 @@ import ReactDOM from "react-dom";
 
 import "./styles.css";
 
-// elemento
-const elemento = <h2>Este é um elemento JSX!</h2>; // JSX
-const elemento2 = React.createElement(
-  "div",
-  null,
-  React.createElement("h2", null, "Este é um elemento!")
-);
+// Jogo de adivinhação de números
+// 0 <> 300
+// Estados: Entrada, Rodando, Fim
 
-// arrow function
-const Foo = props => {
-  return <p>Outro desse {props.number}</p>;
-};
+function App() {
+  const [estado, setEstado] = useState("ENTRADA");
+  const [palpite, setPalpite] = useState(150);
+  const [min, setMin] = useState(0);
+  const [max, setMax] = useState(300);
+  const [numP, setNump] = useState(1);
 
-// componente: functional component
-function App(props) {
-  const [i, setI] = useState(2);
-
-  const increment = () => {
-    setI(i + 2);
+  const iniciarJogo = () => {
+    setEstado("RODANDO");
+    setPalpite(150);
+    setMin(0);
+    setMax(300);
+    setNump(1);
   };
 
-  return (
-    <div className="App">
-      <h1>Hello {props.name}</h1>
-      <h1>Números pares {i}</h1>
-      <button onClick={increment}>Clique aqui</button>
-      <Foo number={i} />
-      <h2>Start editing to see some magic happen!</h2>
-      {elemento}
-      {elemento2}
-    </div>
-  );
+  const menor = () => {
+    setMax(palpite);
+    setNump(numP + 1);
+    const novoPalpite = parseInt((palpite - min) / 2) + min;
+    setPalpite(novoPalpite);
+  };
+
+  const maior = () => {
+    setMin(palpite);
+    setNump(numP + 1);
+    const novoPalpite = parseInt((max - palpite) / 2) + palpite;
+    setPalpite(novoPalpite);
+  };
+
+  const FinalizarJogo = () => {
+    setEstado("FIM");
+  };
+
+  if (estado === "ENTRADA") {
+    return <button onClick={iniciarJogo}>Jogar!</button>;
+  } else {
+    if (estado === "FIM") {
+      return (
+        <div>
+          <h2>
+            Acertei o número {palpite} com {numP} palpites!
+          </h2>
+          <button onClick={iniciarJogo}>Recomeçar!</button>
+        </div>
+      );
+    } else {
+      return (
+        <div className="App">
+          <h2>O Número é {palpite}?</h2>
+          <button onClick={menor}>Menor!</button>
+          <button onClick={FinalizarJogo}>Acertou</button>
+          <button onClick={maior}>Maior!</button>
+        </div>
+      );
+    }
+  }
 }
 
 const rootElement = document.getElementById("root");
